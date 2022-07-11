@@ -2,15 +2,18 @@ const express = require("express");
 const app = express();
 const wsServer = require("express-ws")(app);
 const aWss = wsServer.getWss();
+const config = require("config");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const filePathMiddleware = require("./middleware/filepath.middleware");
 
-const PORT = process.env.PORT || 4500;
+const PORT = process.env.PORT || config.get("serverPort");
 
 app.use(cors());
 app.use(express.json());
-
+// app.use(filePathMiddleware(path))
+app.get('/test', (req, res) => {return res.status(200).json({message: 'heroku works'})});
 app.post('/picture/:id', (req, res) => {
   try {
     const data = req.body.img.replace("data:image/png;base64,", '');
