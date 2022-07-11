@@ -29,9 +29,15 @@ app.post('/picture/:id', (req, res) => {
 app.get('/picture/:id', (req, res) => {
   try {
     const fileName = req.params.id + '.jpg';
-    const data = fs.readFileSync(path.resolve(__dirname, "static", fileName), "base64");
-    const picture = `data:image/png;base64,${data}`;
-    return res.status(200).json(picture);
+    const filePath = path.resolve(__dirname, "static", fileName);
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, "base64");
+      const picture = `data:image/png;base64,${data}`;
+      return res.status(200).json(picture);
+    } else {
+      return res.status(200).json(null);
+    }
+
   } catch (e) {
     console.log(e);
     return res.status(500).json("Cant find picture");
@@ -48,6 +54,7 @@ app.ws("/ws", (ws) => {
       case 'draw':
       case 'clear':
       case 'undo':
+      case 'redo':
         broadcastConnection(ws, msg);
         break;
     }
