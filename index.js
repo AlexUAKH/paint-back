@@ -38,7 +38,7 @@ app.get('/picture/:id', (req, res) => {
       const picture = `data:image/png;base64,${data}`;
       return res.status(200).json(picture);
     } else {
-      return res.status(200).json(null);
+      return res.status(200).json('');
     }
 
   } catch (e) {
